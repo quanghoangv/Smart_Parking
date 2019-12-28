@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -40,17 +41,28 @@ public class Database extends SQLiteOpenHelper {
             statement.executeInsert();
     }
 
-    public void INSERT_NHANVIEN(String idnhanvien, String ten, int sdt, Date ngaysinh){
-        SQLiteDatabase database = getWritableDatabase();
-        String sql = "INSERT INTO NhanVien VALUES(null, ?, ?, ?)";
-        SQLiteStatement statement = database.compileStatement(sql);
-        statement.clearBindings();
+    public boolean INSERT_NHANVIEN(String idnhanvien, String tendn, String mk, String ten, String sdt, String ngaysinh){
 
-       statement.bindString(1, ten);
-       statement.bindString(2, String.valueOf(sdt));
-       statement.bindString(3, String.valueOf(ngaysinh));
+       try {
+           SQLiteDatabase database = getWritableDatabase();
 
-       statement.executeInsert();
+            String sql = "INSERT INTO NhanVien VALUES(null, ?, ?, ?, ?, ?)";
+            SQLiteStatement statement = database.compileStatement(sql);
+            statement.clearBindings();
+
+           statement.bindString(1, String.valueOf(tendn));
+           statement.bindString(2, String.valueOf(mk));
+           statement.bindString(3, String.valueOf(ten));
+           statement.bindString(4, String.valueOf(sdt));
+           statement.bindString(5, String.valueOf(ngaysinh));
+
+
+           statement.executeInsert();
+            return true;
+       }catch (Exception e){
+           Log.e("ninh", e.toString());
+           return false;
+       }
     }
 
 

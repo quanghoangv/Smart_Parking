@@ -13,15 +13,35 @@
     <EditText
         android:id="@+id/edttk"
         android:layout_marginTop="15dp"
-        android:hint="Nhap ten nguoi dung"
+        android:hint="Nhap ten nguoi dung: "
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <EditText
         android:id="@+id/edtmk"
         android:layout_marginTop="15dp"
-        android:hint="Nhap mat khau"
+        android:hint="Nhap mat khau: "
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
+    <EditText
+        android:id="@+id/edtTen"
+        android:layout_marginTop="15dp"
+        android:hint="Nhap ten: "
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <EditText
+        android:id="@+id/edtNgaySinh"
+        android:layout_marginTop="15dp"
+        android:hint="Nhap ngay sinh: "
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <EditText
+        android:id="@+id/edtSdt"
+        android:layout_marginTop="15dp"
+        android:hint="Nhap so dien thoai: "
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <LinearLayout
         android:orientation="horizontal"
         android:gravity="center"

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_doanh_thu"
+            android:title="Doanh Thu" />
+        <item
+            android:id="@+id/nav_qlnv"
+            android:title="QL nhan vien" />
+        <item
+            android:id="@+id/nav_log_out"
+            android:title="Dang xuat" />
+    </group>
+</menu>
