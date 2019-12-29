@@ -95,14 +95,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Cursor cursor = database.GetData("SELECT * FROM ThongTinXe");
         while (cursor.moveToNext()){
             xeArrayList.add(new ThongTinXe(
-                    cursor.getInt(0),
-                    cursor.getString(1),
-                    cursor.getString(2),
-                    cursor.getBlob(3),
-                    cursor.getString(4),
-                    cursor.getString(5)
+                cursor.getInt(0),
+                cursor.getString(1),
+                cursor.getString(2),
+                cursor.getBlob(3),
+                cursor.getString(4),
+                cursor.getString(5)
             ));
-
         }
         adapter.notifyDataSetChanged();
 
@@ -282,7 +281,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.nav_qlds:
-                Toast.makeText(this, "QLDS", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "QLDT", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, Main5Activity.class));
+
                 break;
             case R.id.nav_qlnv:
                 Toast.makeText(this, "QLNV", Toast.LENGTH_SHORT).show();

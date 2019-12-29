@@ -19,13 +19,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class Main2Activity extends AppCompatActivity {
     ImageView imgHinh;
     TextView lbId;
-    Button btnXeVao, btnHuyBo;
+    Button btnXeVao, btnHuyBo, btnDongCa;
     TextView tvIdNfc, tvGioVao, tvGioRa;
-    public static Database database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +86,46 @@ public class Main2Activity extends AppCompatActivity {
 
             }
         });
+
+
+        btnDongCa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //save time Dong Ca into database
+                BitmapDrawable bitmapDrawable = (BitmapDrawable) imgHinh.getDrawable();
+                Bitmap bitmap = bitmapDrawable.getBitmap();
+                ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArray);
+                byte[] hinhAnh = byteArray.toByteArray();
+
+                Date currentTime = Calendar.getInstance().getTime();
+                String gioRa = currentTime.toString();
+                String gioVao = tvGioVao.getText().toString().trim();
+                String thanhTien = tinhTien(gioVao,gioRa);
+
+                Log.e("ninh", hinhAnh.toString());
+                MainActivity.database.INSERT_THONGTINXE(
+                        tvIdNfc.getText().toString().trim(),
+                        gioVao,
+                        hinhAnh,
+                        gioRa,
+                        thanhTien
+                );
+                Toast.makeText(Main2Activity.this,"Da Them", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(Main2Activity.this, Main5Activity.class));
+            }
+        });
+    }
+
+    private String tinhTien(String gioVao, String gioRa){
+        int heso = 5000;
+        String res="Thanh Tien: 0 VND";
+        long secondsGioVao = new Date(gioVao).getTime()/1000;
+        long secondsGioRa = new Date(gioRa).getTime()/1000;
+        long diff = secondsGioRa - secondsGioVao;
+        long tien = diff * heso / 3600;
+        res = "Thanh Tien: "+ String.valueOf(tien) +" VND";
+        return res;
     }
 
     @Override
@@ -127,6 +168,7 @@ public class Main2Activity extends AppCompatActivity {
         tvGioVao = (TextView) findViewById(R.id.tvGioVao);
         tvGioRa = (TextView)findViewById(R.id.tvGioRa);
         lbId = (TextView) findViewById(R.id.lbID);
+        btnDongCa = findViewById(R.id.btnDongCa);
 
         btnHuyBo.setVisibility(View.INVISIBLE);
         btnXeVao.setVisibility(View.INVISIBLE);

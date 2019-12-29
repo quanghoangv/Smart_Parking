@@ -97,4 +97,13 @@
 
     </LinearLayout>
 
+    <Button
+        android:id="@+id/btnDongCa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Dong Ca"
+        tools:layout_editor_absoluteX="294dp"
+        tools:layout_editor_absoluteY="612dp" />
+
 </LinearLayout>
