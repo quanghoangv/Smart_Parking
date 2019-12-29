@@ -73,7 +73,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         navQLNV.setVisibility(View.GONE);
 
-        if(getIntent().getStringExtra("username").equals("ninh")){
+        Intent intent = getIntent();
+        if(intent.getStringExtra("username").equals("ninh")){
             navQLNV.setVisibility(View.VISIBLE);
         }
         navQLDS.setOnClickListener(this);

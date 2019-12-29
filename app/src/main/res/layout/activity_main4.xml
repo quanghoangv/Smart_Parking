@@ -5,10 +5,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".Main4Activity">
 
     <ListView
         android:id="@+id/lvNhanVien"
+        android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
+
+    <TextView
+        android:id="@+id/txtEmpty"
+        android:visibility="gone"
+        android:text="No data"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 </LinearLayout>
