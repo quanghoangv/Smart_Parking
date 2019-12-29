@@ -71,6 +71,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        navQLNV.setVisibility(View.GONE);
+
+        if(getIntent().getStringExtra("username").equals("ninh")){
+            navQLNV.setVisibility(View.VISIBLE);
+        }
         navQLDS.setOnClickListener(this);
         navQLNV.setOnClickListener(this);
         navDangXuat.setOnClickListener(this);
@@ -280,6 +285,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.nav_qlnv:
                 Toast.makeText(this, "QLNV", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, Main4Activity.class));
+
                 break;
             case R.id.nav_dangxuat:
 //                Toast.makeText(this, "Dang xuat", Toast.LENGTH_SHORT).show();

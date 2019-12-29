@@ -1,16 +1,27 @@
 package com.hvq.smart_parking;
 
 public class NhanVien {
-    private String IdNhanVien;
+    private int ID;
+    private String TenDn;
     private String MatKhau;
     private String TenNV;
+    private String NgaySinh;
+    private String Sdt;
 
-    public String getIdNhanVien() {
-        return IdNhanVien;
+    public int getID() {
+        return ID;
     }
 
-    public void setIdNhanVien(String idNhanVien) {
-        IdNhanVien = idNhanVien;
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    public String getTenDn() {
+        return TenDn;
+    }
+
+    public void setTenDn(String tenDn) {
+        TenDn = tenDn;
     }
 
     public String getMatKhau() {
@@ -45,15 +56,13 @@ public class NhanVien {
         Sdt = sdt;
     }
 
-    public NhanVien(String idNhanVien, String matKhau, String tenNV, String ngaySinh, String sdt) {
-        IdNhanVien = idNhanVien;
+    public NhanVien(String TenDn, String matKhau, String tenNV, String ngaySinh, String sdt) {
+        TenDn = TenDn;
         MatKhau = matKhau;
         TenNV = tenNV;
         NgaySinh = ngaySinh;
         Sdt = sdt;
     }
 
-    private String NgaySinh;
-    private String Sdt;
 
 }

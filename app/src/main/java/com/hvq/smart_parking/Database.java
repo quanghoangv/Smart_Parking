@@ -1,5 +1,6 @@
 package com.hvq.smart_parking;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -64,6 +65,30 @@ public class Database extends SQLiteOpenHelper {
            return false;
        }
     }
+
+    //CREATE TABLE IF NOT EXISTS NhanVien
+    // (Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    // TenDN VARCHAR(150),
+    // MatKhau VARCHAR(150),
+    // Ten VARCHAR(150),
+    // Sdt VARCHAR(150),
+    // NgaySinh VARCHAR(150))");
+    //
+    public boolean UPDATE_NHANVIEN(String idnhanvien, String tendn, String mk,
+                                   String ten, String sdt, String ngaysinh){
+
+        SQLiteDatabase database = getWritableDatabase();
+        ContentValues args = new ContentValues();
+//        args.put("Id", idnhanvien);
+        args.put("TenDN", tendn);
+        args.put("MatKhau", mk);
+        args.put("Ten", ten);
+        args.put("Sdt", sdt);
+        args.put("NgaySinh", ngaysinh);
+        int i =  database.update("NhanVien", args,  " Id = " + idnhanvien, null);
+        return i > 0;
+    }
+
 
 
     public void CAPNHAT(String GioRa, String ID){
