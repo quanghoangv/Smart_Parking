@@ -89,6 +89,10 @@ public class Database extends SQLiteOpenHelper {
         return i > 0;
     }
 
+    public boolean DELETE_NHANVIEN(String id){
+        SQLiteDatabase db=this.getWritableDatabase();
+        return db.delete("NhanVien","Id = ?",new String[] {id}) > 0;
+    }
 
 
     public void CAPNHAT(String GioRa, String ID){

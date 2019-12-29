@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Main4Activity extends AppCompatActivity {
 
@@ -42,53 +44,42 @@ public class Main4Activity extends AppCompatActivity {
 
         //get Data
         getDataNv();
+        Log.e("ninh",""+ dsNhanVien.size());
         adapter.notifyDataSetChanged();
 
-        if (dsNhanVien.size() == 0) {
-            lvNhanVien.setVisibility(View.GONE);
-            txtEmpty.setVisibility(View.VISIBLE);
-        } else {
+        lvNhanVien.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(
+                        Main4Activity.this);
+                alert.setTitle("Alert!!");
+                alert.setMessage("Are you sure to delete record");
+                alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
 
-            lvNhanVien.setVisibility(View.VISIBLE);
-            txtEmpty.setVisibility(View.GONE);
-
-            lvNhanVien.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                @Override
-                public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(
-                            Main4Activity.this);
-                    alert.setTitle("Alert!!");
-                    alert.setMessage("Are you sure to delete record");
-                    alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            //do your work here
-                            if(deleteThongTinNv(position)){
-                                dsNhanVien.clear();
-                                adapter.notifyDataSetChanged();
-                                if (dsNhanVien.size() == 0) {
-                                    lvNhanVien.setVisibility(View.GONE);
-                                    txtEmpty.setVisibility(View.VISIBLE);
-                                }
-                            }
-
-                            dialog.dismiss();
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //do your work here
+                        if(deleteThongTinNv(position)){
+                            getDataNv();
+                            adapter.notifyDataSetChanged();
                         }
-                    });
-                    alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
 
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
 
-                            dialog.dismiss();
-                        }
-                    });
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-                    alert.show();
-                    return true;
-                }
-            });
+                        dialog.dismiss();
+                    }
+                });
+
+                alert.show();
+                return true;
+            }
+        });
 
 
         lvNhanVien.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -98,7 +89,7 @@ public class Main4Activity extends AppCompatActivity {
                 showEditDialog(nv);
             }
         });
-        }
+
     }
 
 //    @Override
@@ -111,6 +102,7 @@ public class Main4Activity extends AppCompatActivity {
 //    }
 
     private void getDataNv() {
+        dsNhanVien.clear();
         Cursor cursor = Activity_Login.database.GetData("SELECT * FROM NhanVien");
         if (cursor != null) {
             while (cursor.moveToNext()) {
@@ -158,9 +150,8 @@ public class Main4Activity extends AppCompatActivity {
 
                 if (Activity_Login.database.UPDATE_NHANVIEN(String.valueOf(nhanVien.getID()), tenDn, mk, tenNv, sdt, ngaySinh)) {
                     Toast.makeText(Main4Activity.this, "Update Thanh Cong!", Toast.LENGTH_SHORT).show();
-//                    dsNhanVien.clear();
-//                    getDataNv();
-//                    adapter.notifyDataSetChanged();
+                    getDataNv();
+                    adapter.notifyDataSetChanged();
                     dialog.cancel();
                 } else {
                     Toast.makeText(Main4Activity.this, "Update That Bai!", Toast.LENGTH_SHORT).show();
@@ -177,19 +168,13 @@ public class Main4Activity extends AppCompatActivity {
     }
 
     private boolean deleteThongTinNv(int position) {
-        try {
-            int id = dsNhanVien.get(position).getID();
-            String sql = "DELETE FROM NhanVien WHERE Id = " + id;
-            Activity_Login.database.QueryData(sql);
+        int id = dsNhanVien.get(position).getID();
+        boolean res = Activity_Login.database.DELETE_NHANVIEN(String.valueOf(id));
+        if(res)
             Toast.makeText(this, "Xoa thanh cong!", Toast.LENGTH_SHORT).show();
-            return true;
-        }catch (Exception e){
-            Log.e("ninh", e.toString());
-
+        else
             Toast.makeText(this, "Xoa that bai!", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
+        return  res;
     }
     @Override
     public boolean onNavigateUp(){
