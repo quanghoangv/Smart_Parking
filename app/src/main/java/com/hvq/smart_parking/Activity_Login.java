@@ -133,6 +133,7 @@ private void ControlButton() {
                     editor.putBoolean("IS_LOGIN", true);
                     editor.apply();
                     Intent intent = new Intent(Activity_Login.this, MainActivity.class);
+                    intent.putExtra("username", tenDn);
                     startActivity(intent);
                 } else{
                     Toast.makeText(Activity_Login.this, "Ban da dang nhap that bai",Toast.LENGTH_SHORT).show();

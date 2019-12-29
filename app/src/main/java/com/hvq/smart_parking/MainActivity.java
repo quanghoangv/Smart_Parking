@@ -1,22 +1,31 @@
 package com.hvq.smart_parking;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.nfc.tech.NfcA;
@@ -26,13 +35,16 @@ import android.nfc.tech.NfcV;
 import android.nfc.tech.IsoDep;
 import android.nfc.tech.MifareClassic;
 import android.nfc.tech.MifareUltralight;
+import android.widget.Toast;
+
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     EditText edtIdNfc;
     Button btnTimKiem;
@@ -42,6 +54,11 @@ public class MainActivity extends AppCompatActivity {
     XeAdapter adapter;
     ThongTinXe thongTinXe;
 
+    private TextView tvUserName;
+    private ImageView imgAvatar;
+    private LinearLayout navQLNV, navQLDS, navDangXuat;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle drawerToggle;
 
 
     @Override
@@ -49,6 +66,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Anhxa();
+
+        drawerLayout = findViewById(R.id.activity_main_drawer);
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        navQLDS.setOnClickListener(this);
+        navQLNV.setOnClickListener(this);
+        navDangXuat.setOnClickListener(this);
+
+        tvUserName.setText(getIntent().getStringExtra("username"));
+
+
         xeArrayList = new ArrayList<>();
         adapter =new XeAdapter(this, R.layout.activity_chi_tiet_xe, xeArrayList);
         lvThongTinXe.setAdapter(adapter);
@@ -84,6 +113,28 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onPostCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
+        super.onPostCreate(savedInstanceState, persistentState);
+
+        drawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if(drawerToggle.onOptionsItemSelected(item)){
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void deleteThongTinXe(int position){
         int id = xeArrayList.get(position).getId();
         String sql = "DELETE FROM ThongTinXe WHERE Id = " + id;
@@ -95,6 +146,12 @@ public class MainActivity extends AppCompatActivity {
         edtIdNfc = (EditText)findViewById(R.id.edtfindWithID);
         btnTimKiem = (Button)findViewById(R.id.btnTimKiem);
         lvThongTinXe = (ListView)findViewById(R.id.lvThongTinXe);
+
+        navQLNV = findViewById(R.id.nav_qlnv);
+        navQLDS = findViewById(R.id.nav_qlds);
+        navDangXuat = findViewById(R.id.nav_dangxuat);
+
+        tvUserName = findViewById(R.id.tvUserName);
     }
 //    public void onNewIntent(Intent intent) {
 //        Tag tagFromIntent = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
@@ -122,8 +179,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.activity_main, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
+
 
     @Override
     protected void onResume() {
@@ -159,6 +217,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
         if (intent.getAction().equals(NfcAdapter.ACTION_TAG_DISCOVERED)) {
             Tag tagFromIntent = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             String IdNfcSet = ByteArrayToHexString(intent.getByteArrayExtra(NfcAdapter.EXTRA_ID));
@@ -213,4 +272,26 @@ public class MainActivity extends AppCompatActivity {
         return out;
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.nav_qlds:
+                Toast.makeText(this, "QLDS", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_qlnv:
+                Toast.makeText(this, "QLNV", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_dangxuat:
+//                Toast.makeText(this, "Dang xuat", Toast.LENGTH_SHORT).show();
+                SharedPreferences myPrefs = getSharedPreferences("IS_LOGIN", MODE_PRIVATE);
+                SharedPreferences.Editor editor = myPrefs.edit();
+                editor.clear();
+                editor.commit();
+                Intent intent = new Intent(MainActivity.this, Activity_Login.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                break;
+
+        }
+    }
 }
